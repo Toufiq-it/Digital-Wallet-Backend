@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+// import { IWallet } from "../../wallet/wallet.interface";
 
 export enum Role {
     ADMIN = "ADMIN",
@@ -13,6 +14,7 @@ export interface IAuthProvider {
 
 export enum IsActive {
     ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE",
     BLOCKED = "BLOCKED",
 }
 
@@ -30,4 +32,6 @@ export interface IUser {
     isVarified?: boolean,
     role: Role,
     auth: IAuthProvider[],
+    wallet?: Types.ObjectId,
+
 };

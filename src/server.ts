@@ -3,6 +3,7 @@ import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
 import { envVars } from "./app/config/env";
+import { seedAdmin } from "./app/ulits/seedAdmin";
 
 let server: Server;
 
@@ -21,7 +22,12 @@ const startServer = async () => {
 
 };
 
-startServer();
+// ifi function
+(async () => {
+    await startServer();
+    // admin
+    await seedAdmin();
+})()
 
 
 // unhandled rejection error

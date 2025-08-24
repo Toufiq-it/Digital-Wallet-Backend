@@ -12,6 +12,12 @@ export const createUserZodSchema = z.object({
         .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
             message: "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
         }),
+    role: z
+    .enum(Object.values(Role) as [string]),
+    // wallet: z
+    //     .number({ error: "Wallet must be a number"})
+    //     .int({message: "wallet must be an integer"})
+    //     .min(0, {message: "Wallet must be a positive number"}),
     email: z
         .string({ error: "Email must be string" })
         .email({ message: "Invalid email address format." })
@@ -33,7 +39,8 @@ export const createUserZodSchema = z.object({
     address: z
         .string({ error: "Address must be string" })
         .max(200, { message: "Address cannot exceed 200 characters." })
-        .optional()
+        .optional(),
+    // Wallet: z.number().optional(),
 });
 
 export const updateUserZodSchema = z.object({
@@ -54,14 +61,13 @@ export const updateUserZodSchema = z.object({
         .regex(/^(?=.*\d)/, {
             message: "Password must contain at least 1 number.",
         }).optional(),
-    phone: z
-        .string({ error: "Phone Number must be string" })
-        .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
-            message: "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
-        })
+    email: z
+        .string({ error: "Email must be string" })
+        .email({ message: "Invalid email address format." })
+        .min(5, { message: "Email must be at least 5 characters long." })
+        .max(100, { message: "Email cannot exceed 100 characters." })
         .optional(),
     role: z
-        // .enum(["ADMIN", "AGENT", "USER"])
         .enum(Object.values(Role) as [string])
         .optional(),
     isActive: z
