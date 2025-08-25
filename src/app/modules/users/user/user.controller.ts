@@ -20,6 +20,19 @@ const createUser = catchAsync(async (req: Request, res: Response, next: NextFunc
     });
 });
 
+// get single user
+const getSingleUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const slug = req.params.slug;
+    const user = await UserService.getSingleUser(slug);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "User Retrived Successfully",
+        data: user,
+    });
+});
+
 // user update
 const updateUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id;
@@ -99,6 +112,7 @@ const getMyTransactions = catchAsync(async (req: Request, res: Response, next: N
     });
 });
 
+
 // user wallet status update
 const blockWallet = catchAsync(async (req: Request, res: Response) => {
     const { userId, status } = req.body;
@@ -106,13 +120,13 @@ const blockWallet = catchAsync(async (req: Request, res: Response) => {
     if (status === "APPROVED" || status === "SUSPENDED") {
         throw new AppError(httpStatus.BAD_REQUEST, "The User will only be ACTIVE or BLOCKED")
     }
-    
+
     const user = await UserService.blockWallet(userId, status);
-    sendResponse(res, { 
-        statusCode: 200, 
-        success: true, 
-        message: "User Wallet status updated", 
-        data: user 
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "User Wallet status updated",
+        data: user
     });
 });
 
@@ -120,6 +134,7 @@ const blockWallet = catchAsync(async (req: Request, res: Response) => {
 
 export const UserController = {
     createUser,
+    getSingleUser,
     updateUser,
     // user Wallet
     addMoney,

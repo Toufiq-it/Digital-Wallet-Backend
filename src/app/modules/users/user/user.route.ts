@@ -10,43 +10,52 @@ import { userStatusSchema } from "../admin/admin.validation";
 const router = Router();
 
 // User Registertion
-router.post("/register", 
-    validateRequest(createUserZodSchema), 
+router.post("/register",
+    validateRequest(createUserZodSchema),
     UserController.createUser
 );
 
+// user Update
+router.patch("/:id",
+    validateRequest(updateUserZodSchema),
+    checkAuth(...Object.values(Role)),
+    UserController.updateUser
+);
+
+// get user
+router.get("/:slug",
+    UserController.getSingleUser
+);
+
+
 // ---------------user Wallet Route-----------
-router.post("/add-money", 
+
+
+router.post("/add-money",
     checkAuth(Role.USER),
-    validateRequest(addWithdrewMoneyZod), 
+    validateRequest(addWithdrewMoneyZod),
     UserController.addMoney);
 
-router.post("/withdraw", 
+router.post("/withdraw",
     checkAuth(Role.USER),
-    validateRequest(addWithdrewMoneyZod), 
+    validateRequest(addWithdrewMoneyZod),
     UserController.withdraw);
 
-router.post("/send-money", 
+router.post("/send-money",
     checkAuth(Role.USER),
-    validateRequest(sendMoneyZod), 
+    validateRequest(sendMoneyZod),
     UserController.sendMoney);
 
-router.get("/my-transactions", 
-    checkAuth(Role.USER), 
+router.get("/my-transactions",
+    checkAuth(Role.USER),
     UserController.getMyTransactions);
 
 router.patch(
-  "/status",
-  checkAuth(Role.USER, Role.ADMIN),
-  validateRequest(userStatusSchema),
-  UserController.blockWallet
+    "/status",
+    checkAuth(Role.USER, Role.ADMIN),
+    validateRequest(userStatusSchema),
+    UserController.blockWallet
 );
 
-// user Update
-router.patch("/:id", 
-    validateRequest(updateUserZodSchema), 
-    checkAuth(...Object.values(Role)), 
-    UserController.updateUser
-);
 
 export const UserRoutes = router;

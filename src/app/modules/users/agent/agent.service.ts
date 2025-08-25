@@ -1,4 +1,3 @@
-// agent.service.ts
 import httpStatus from "http-status-codes";
 import mongoose from "mongoose";
 import { User } from "../user/user.model";
@@ -8,6 +7,7 @@ import { Transaction } from "../../transaction/transaction.model";
 import { TransactionStatus, TransactionType } from "../../transaction/transaction.interface";
 import { JwtPayload } from "jsonwebtoken";
 import { WalletStatus } from "../../wallet/wallet.interface";
+
 
 // Cash In
 const cashIn = async (agentId: string, userId: string, amount: number) => {

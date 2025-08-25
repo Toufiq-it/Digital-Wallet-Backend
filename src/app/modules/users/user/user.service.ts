@@ -153,8 +153,18 @@ const updateUser = async (userId: string, payload: Partial<IUser>, decodedToken:
 
   const newUpdateUser = await User.findByIdAndUpdate(userId, payload, { new: true, runValidators: true });
   return newUpdateUser;
-}
+};
 
+// get single user
+const getSingleUser = async (slug: string) =>{
+  const user = await User.findOne({slug});
+  if (!user) {
+        throw new AppError(httpStatus.BAD_REQUEST, "User not found.");
+    }
+  return {
+    data: user,
+  }
+};
 
 // -------------------User WALLET Service---------------------
 
@@ -359,6 +369,7 @@ const getMyTransactions = async (userId: string, query: Record<string, string>) 
   };
 };
 
+
 // user wallet status update => admin
 const blockWallet = async (userId: string, status: WalletStatus) => {
     const user = await User.findById(userId).populate("wallet", "_id balance status");
@@ -374,10 +385,10 @@ const blockWallet = async (userId: string, status: WalletStatus) => {
 };
 
 
-
 export const UserService = {
   createUser,
   updateUser,
+  getSingleUser,
   // Wallet
   addMoney,
   withdraw,
