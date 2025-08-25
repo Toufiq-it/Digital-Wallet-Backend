@@ -7,6 +7,7 @@ import { Wallet } from "../../wallet/wallet.model";
 import { Transaction } from "../../transaction/transaction.model";
 import { TransactionStatus, TransactionType } from "../../transaction/transaction.interface";
 import { JwtPayload } from "jsonwebtoken";
+import { WalletStatus } from "../../wallet/wallet.interface";
 
 // Cash In
 const cashIn = async (agentId: string, userId: string, amount: number) => {
@@ -152,8 +153,23 @@ const agentTransactions = async (agentId: string, query: Record<string, string>)
   };
 };
 
+// agent wallet status update
+const suspendedWallet = async (agentId: string, status: WalletStatus) => {
+    const user = await User.findById(agentId).populate("wallet", "_id balance status");
+    if (!user || user.role !== "AGENT") {
+        throw new AppError(httpStatus.BAD_REQUEST, "Agent not found");
+    }
+
+    const updateAgent = user.wallet as JwtPayload;
+
+    updateAgent.status = status;
+    await updateAgent.save();
+    return user;
+};
+
 export const AgentService = {
   cashIn,
   cashOut,
   agentTransactions,
+  suspendedWallet,
 };

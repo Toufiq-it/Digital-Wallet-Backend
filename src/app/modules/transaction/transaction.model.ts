@@ -1,7 +1,6 @@
 import { model, Schema } from "mongoose"
 import { ITransaction, TransactionStatus, TransactionType } from "./transaction.interface"
 
-
 const transactionSchema = new Schema<ITransaction>({
     type: { type: String, enum: Object.values(TransactionType), required: true},
     amount: { type: Number, required: true },

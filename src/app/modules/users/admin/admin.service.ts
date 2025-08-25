@@ -1,10 +1,6 @@
-import httpStatus from "http-status-codes";
 import { User } from "../user/user.model";
 import { Wallet } from "../../wallet/wallet.model";
 import { Transaction } from "../../transaction/transaction.model";
-import AppError from "../../../errorHelpers/AppError";
-import { WalletStatus } from "../../wallet/wallet.interface";
-import { JwtPayload } from "jsonwebtoken";
 
 
 const getAllUsers = async () => {
@@ -75,37 +71,9 @@ const getAllTransactions = async (query: Record<string, string>) => {
   };
 };
 
-const blockOrUnblockWallet = async (userId: string, status: WalletStatus) => {
-    const user = await User.findById(userId).populate("wallet", "_id balance status");
-    if (!user || user.role !== "USER") {
-        throw new AppError(httpStatus.BAD_REQUEST, "User not found");
-    }
-
-    const updateUser = user.wallet as JwtPayload;
-
-    updateUser.status = status;
-    await updateUser.save();
-    return user;
-};
-
-const approveOrSuspendAgent = async (agentId: string, status: WalletStatus) => {
-    const user = await User.findById(agentId).populate("wallet", "_id balance status");
-    if (!user || user.role !== "AGENT") {
-        throw new AppError(httpStatus.BAD_REQUEST, "Agent not found");
-    }
-
-    const updateAgent = user.wallet as JwtPayload;
-
-    updateAgent.status = status;
-    await updateAgent.save();
-    return user;
-};
-
 export const AdminService = {
     getAllUsers,
     getAllAgents,
     getAllWallets,
     getAllTransactions,
-    blockOrUnblockWallet,
-    approveOrSuspendAgent,
 };

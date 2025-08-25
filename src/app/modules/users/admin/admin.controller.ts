@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import { catchAsync } from "../../../ulits/catchAsync";
 import sendResponse from "../../../ulits/sendResponse";
 import { AdminService } from "./admin.service";
-import AppError from "../../../errorHelpers/AppError";
-import httpStatus from 'http-status-codes';
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     const users = await AdminService.getAllUsers();
@@ -48,43 +46,10 @@ const getAllTransactions = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-const blockOrUnblockWallet = catchAsync(async (req: Request, res: Response) => {
-    const { userId, status } = req.body;
-
-    if (status === "APPROVED" || status === "SUSPENDED") {
-        throw new AppError(httpStatus.BAD_REQUEST, "The User will only be ACTIVE or BLOCKED")
-    }
-    
-    const user = await AdminService.blockOrUnblockWallet(userId, status);
-    sendResponse(res, { 
-        statusCode: 200, 
-        success: true, 
-        message: "User Wallet status updated", 
-        data: user 
-    });
-});
-
-const approveOrSuspendAgent = catchAsync(async (req: Request, res: Response) => {
-    const { agentId, status } = req.body;
-
-    if (status === "ACTIVE" || status === "BLOCKED") {
-        throw new AppError(httpStatus.BAD_REQUEST, "The Agent will only be APPROVED or SUSPENDED")
-    }
-
-    const agent = await AdminService.approveOrSuspendAgent(agentId, status);
-    sendResponse(res, { 
-        statusCode: 200, 
-        success: true, 
-        message: "Agent Wallet status updated", 
-        data: agent 
-    });
-});
 
 export const AdminController = {
     getAllUsers,
     getAllAgents,
     getAllWallets,
     getAllTransactions,
-    blockOrUnblockWallet,
-    approveOrSuspendAgent,
 };

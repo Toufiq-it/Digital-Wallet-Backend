@@ -5,6 +5,7 @@ import { AgentService } from "./agent.service";
 import sendResponse from "../../../ulits/sendResponse";
 import { JwtPayload } from "jsonwebtoken";
 import httpStatus from 'http-status-codes';
+import AppError from "../../../errorHelpers/AppError";
 
 
 const cashIn = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -55,8 +56,26 @@ const agentTransactions = catchAsync(async (req: Request, res: Response, next: N
   });
 });
 
+// agent wallet update
+const suspendedWallet = catchAsync(async (req: Request, res: Response) => {
+    const { agentId, status } = req.body;
+
+    if (status === "ACTIVE" || status === "BLOCKED") {
+        throw new AppError(httpStatus.BAD_REQUEST, "The Agent will only be APPROVED or SUSPENDED")
+    }
+
+    const agent = await AgentService.suspendedWallet(agentId, status);
+    sendResponse(res, { 
+        statusCode: 200, 
+        success: true, 
+        message: "Agent Wallet status updated", 
+        data: agent 
+    });
+});
+
 export const AgentController = {
     cashIn,
     cashOut,
     agentTransactions,
+    suspendedWallet,
 };

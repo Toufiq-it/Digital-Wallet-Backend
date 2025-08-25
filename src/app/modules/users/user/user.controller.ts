@@ -5,6 +5,7 @@ import sendResponse from "../../../ulits/sendResponse";
 import httpStatus from 'http-status-codes';
 import { UserService } from "./user.service";
 import { JwtPayload } from "jsonwebtoken";
+import AppError from "../../../errorHelpers/AppError";
 
 
 // create user
@@ -36,23 +37,94 @@ const updateUser = catchAsync(async (req: Request, res: Response, next: NextFunc
     });
 });
 
+// ---------------------User WALLET Controller-------------------
 
-// Get All users
-const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const users = await UserService.getAllUsers();
+// Add money
+const addMoney = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+    // console.log("req user",req.user);
+    const decodeToken = req.user as JwtPayload
+    const wallet = await UserService.addMoney(req.body, decodeToken.userId);
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.CREATED,
-        message: "All Users Retrieved Successfully",
-        data: users.data,
-        meta: users.meta
+        message: 'Money added successfully',
+        data: wallet,
+    });
+});
+
+// withdraw 
+const withdraw = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const decodeToken = req.user as JwtPayload
+    console.log(req.user);
+
+    const wallet = await UserService.withdraw(req.body, decodeToken.userId);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: 'Withdraw successfully',
+        data: wallet,
+    });
+});
+
+// send money
+const sendMoney = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const decodeToken = req.user as JwtPayload
+    const { receiverId, amount } = req.body;
+    const wallet = await UserService.sendMoney({ receiverId, amount }, decodeToken.userId);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: 'Send-Money successfully',
+        data: wallet,
+    });
+});
+
+// get my Transaction
+const getMyTransactions = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const decodeToken = req.user as JwtPayload
+    const userId = decodeToken.userId
+    const query = req.query
+
+    const transactions = await UserService.getMyTransactions(userId, query as Record<string, string>);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "My Transaction history",
+        data: transactions,
+    });
+});
+
+// user wallet status update
+const blockWallet = catchAsync(async (req: Request, res: Response) => {
+    const { userId, status } = req.body;
+
+    if (status === "APPROVED" || status === "SUSPENDED") {
+        throw new AppError(httpStatus.BAD_REQUEST, "The User will only be ACTIVE or BLOCKED")
+    }
+    
+    const user = await UserService.blockWallet(userId, status);
+    sendResponse(res, { 
+        statusCode: 200, 
+        success: true, 
+        message: "User Wallet status updated", 
+        data: user 
     });
 });
 
 
-export const userController = {
+
+export const UserController = {
     createUser,
     updateUser,
-    getAllUsers,
+    // user Wallet
+    addMoney,
+    withdraw,
+    sendMoney,
+    getMyTransactions,
+    blockWallet,
 };

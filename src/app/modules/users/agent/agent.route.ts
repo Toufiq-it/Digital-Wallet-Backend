@@ -4,6 +4,7 @@ import { cashInOutSchema } from "./agent.validation";
 import { AgentController } from "./agent.controller";
 import { checkAuth } from "../../../middlewares/checkAuth";
 import { Role } from "../user/user.interface";
+import { agentStatusSchema } from "../admin/admin.validation";
 
 
 const router = Router();
@@ -26,6 +27,14 @@ router.get(
   "/my-transactions",
   checkAuth(Role.AGENT),
   AgentController.agentTransactions
+);
+
+// agent wallet
+router.patch(
+  "/status",
+  checkAuth(Role.AGENT, Role.ADMIN),
+  validateRequest(agentStatusSchema),
+  AgentController.suspendedWallet
 );
 
 
