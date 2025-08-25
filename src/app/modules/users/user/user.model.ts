@@ -37,18 +37,6 @@ const userSchema = new Schema<IUser>({
     versionKey: false
 });
 
-// auto-populate wallet on any find/findOne/findById
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// function autoPopulateWallet(this: any, next: NextFunction) {
-//   this.populate("wallet");
-//   next();
-// }
-// // userSchema.pre("find", autoPopulateWallet);
-// // UserSchema.pre("findOne", autoPopulateWallet);
-// // UserSchema.pre("findOneAndUpdate", autoPopulateWallet);
-// userSchema.pre("findById", autoPopulateWallet);
-
-
 // create slug
 userSchema.pre("save", async function (next) {
     if (this.isModified("name")) {

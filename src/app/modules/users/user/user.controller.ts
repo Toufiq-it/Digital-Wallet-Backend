@@ -70,8 +70,6 @@ const addMoney = catchAsync(async (req: Request, res: Response, next: NextFuncti
 // withdraw 
 const withdraw = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const decodeToken = req.user as JwtPayload
-    console.log(req.user);
-
     const wallet = await UserService.withdraw(req.body, decodeToken.userId);
 
     sendResponse(res, {

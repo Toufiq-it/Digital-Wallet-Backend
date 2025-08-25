@@ -1,26 +1,22 @@
-import { Response } from "express";
-import { envVars } from "../config/env";
-
-export interface AuthTokens {
-    accessToken?: string,
-    refreshToken?: string,
-}
-
-export const setAuthCookie = (res: Response, tokenInfo: AuthTokens) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.setAuthCookie = void 0;
+const env_1 = require("../config/env");
+const setAuthCookie = (res, tokenInfo) => {
     if (tokenInfo.accessToken) {
         res.cookie("accessToken", tokenInfo.accessToken, {
             // frontend e cookies ta set korbe
             httpOnly: true,
-            secure: envVars.NODE_ENV === "production",
+            secure: env_1.envVars.NODE_ENV === "production",
             sameSite: "none",
         });
     }
-
     if (tokenInfo.refreshToken) {
         res.cookie("refreshToken", tokenInfo.refreshToken, {
             httpOnly: true,
-            secure: envVars.NODE_ENV === "production",
+            secure: env_1.envVars.NODE_ENV === "production",
             sameSite: "none",
-        })
+        });
     }
 };
+exports.setAuthCookie = setAuthCookie;

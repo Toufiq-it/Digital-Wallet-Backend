@@ -16,6 +16,7 @@ app.use(expressSession({
 }));
 app.use(cookieParser());
 app.use(express.json());
+app.set("trust proxy", 1);
 app.use(cors());
 
 app.use("/api", router)

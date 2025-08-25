@@ -9,9 +9,7 @@ export const seedAdmin = async ()=>{
         if (isAdminExist) {
             console.log("Admin already exist");
             return;
-        }
-        console.log("Trying to create admin...");
-        
+        } 
 
         const hasdedPassword = await bcryptjs.hash(envVars.ADMIN_PASSWORD, Number(envVars.BCRYPT_SALT_ROUND));
 

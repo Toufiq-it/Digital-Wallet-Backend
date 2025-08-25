@@ -17,16 +17,6 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
             throw new AppError(httpStatus.FORBIDDEN, "No token received");
         }
 
-        // const authHeader = req.headers.authorization;
-        // if (!authHeader) {
-        //     throw new AppError(httpStatus.FORBIDDEN, "No token received");
-        // }
-
-        // // Extract token from "Bearer <token>"
-        // const accessToken = authHeader.startsWith("Bearer ")
-        //     ? authHeader.split(" ")[1]
-        //     : authHeader;
-
 
         // jwt token verified
         const verifiedToke = verifyToken(accessToken, envVars.JWT_ACCESS_SECRET) as JwtPayload;
