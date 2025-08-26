@@ -17,7 +17,6 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
             throw new AppError(httpStatus.FORBIDDEN, "No token received");
         }
 
-
         // jwt token verified
         const verifiedToke = verifyToken(accessToken, envVars.JWT_ACCESS_SECRET) as JwtPayload;
         // console.log("Decoded token in middleware:", verifiedToke);

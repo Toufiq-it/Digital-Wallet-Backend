@@ -156,14 +156,18 @@ const updateUser = async (userId: string, payload: Partial<IUser>, decodedToken:
 };
 
 // get single user
-const getSingleUser = async (slug: string) =>{
-  const user = await User.findOne({slug});
+const getSingleUser = async (slug: string, loginSlug: string) =>{
+
+  const user = await User.findOne({slug}).populate("wallet", "balance status");
+
   if (!user) {
-        throw new AppError(httpStatus.BAD_REQUEST, "User not found.");
-    }
-  return {
-    data: user,
+    throw new AppError(httpStatus.BAD_REQUEST, "User not found.");
   }
+
+  if (loginSlug !== user.slug) {
+        throw new AppError(httpStatus.FORBIDDEN, "You can not see Other user Informetions")
+    }
+  return user;
 };
 
 // -------------------User WALLET Service---------------------
@@ -336,39 +340,6 @@ const sendMoney = async (payload: { receiverId: string; amount: number }, userId
   }
 };
 
-// View My Transaction History
-const getMyTransactions = async (userId: string, query: Record<string, string>) => {
-  const page = Number(query.page) || 1;
-  const limit = Number(query.limit) || 10;
-  const sort = query.sortBy || "createdAt";
-  // const sortOrder = query.sortOrder === "asc" ? "asc" : "desc";
-
-  const skip = (page - 1) * limit;
-
-  const filter = {
-    $or: [{ fromUser: userId }, { toUser: userId }],
-  };
-
-  const transactions = await Transaction.find(filter)
-    .populate("fromUser", "name phone")
-    .populate("toUser", "name phone")
-    .sort(sort)
-    .skip(skip)
-    .limit(limit);
-
-  const total = await Transaction.countDocuments(filter);
-
-  return {
-    meta: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    },
-    data: transactions,
-  };
-};
-
 
 // user wallet status update => admin
 const blockWallet = async (userId: string, status: WalletStatus) => {
@@ -393,6 +364,5 @@ export const UserService = {
   addMoney,
   withdraw,
   sendMoney,
-  getMyTransactions,
   blockWallet,
 };

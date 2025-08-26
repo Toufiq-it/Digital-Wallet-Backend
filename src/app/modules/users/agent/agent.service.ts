@@ -120,39 +120,6 @@ const cashOut = async (agentId: string, userId: string, amount: number) => {
   }
 };
 
-// View My Transaction History
-const agentTransactions = async (agentId: string, query: Record<string, string>) => {
-  const page = Number(query.page) || 1;
-  const limit = Number(query.limit) || 10;
-  const sort = query.sortBy || "createdAt";
-  // const sortOrder = query.sortOrder === "asc" ? "asc" : "desc";
-
-  const skip = (page - 1) * limit;
-
-  const filter = {
-    $or: [{ fromUser: agentId }, { toUser: agentId }],
-  };
-
-  const transactions = await Transaction.find(filter)
-    .populate("fromUser", "name phone role") 
-    .populate("toUser", "name phone role")
-    .sort(sort)
-    .skip(skip)
-    .limit(limit);
-
-  const total = await Transaction.countDocuments(filter);
-
-  return {
-    meta: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    },
-    data: transactions,
-  };
-};
-
 // agent wallet status update
 const suspendedWallet = async (agentId: string, status: WalletStatus) => {
     const user = await User.findById(agentId).populate("wallet", "_id balance status");
@@ -170,6 +137,5 @@ const suspendedWallet = async (agentId: string, status: WalletStatus) => {
 export const AgentService = {
   cashIn,
   cashOut,
-  agentTransactions,
   suspendedWallet,
 };

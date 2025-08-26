@@ -27,10 +27,20 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
     };
 
     // jwt token
-    const userTokens = createUsertoken(isUserExist);
+     // convert to plain object
+    const user = isUserExist.toObject();
 
+    // jwt token (with slug guaranteed)
+    const userTokens = createUsertoken({
+        _id: user._id,
+        phone: user.phone,
+        role: user.role,
+        slug: user.slug,
+    });
+
+    // return without password
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: pass, ...rest} = isUserExist.toObject();
+    const { password: pass, ...rest } = user;
 
     return {
         accessToken: userTokens.accessToken,
@@ -64,8 +74,6 @@ const resetPassword = async (oldPassword: string, newPassword: string, decodedTo
 
     user!.save();
 };
-
-// user -> login -> token(user identity means _id, email, role etc) -> booking / payment / payment cancel -> token ->
 
 export const AuthServices = {
     credentialsLogin,

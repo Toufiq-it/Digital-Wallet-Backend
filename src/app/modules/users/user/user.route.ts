@@ -15,18 +15,6 @@ router.post("/register",
     UserController.createUser
 );
 
-// user Update
-router.patch("/:id",
-    validateRequest(updateUserZodSchema),
-    checkAuth(...Object.values(Role)),
-    UserController.updateUser
-);
-
-// get user
-router.get("/:slug",
-    UserController.getSingleUser
-);
-
 
 // ---------------user Wallet Route-----------
 
@@ -46,10 +34,6 @@ router.post("/send-money",
     validateRequest(sendMoneyZod),
     UserController.sendMoney);
 
-router.get("/my-transactions",
-    checkAuth(Role.USER),
-    UserController.getMyTransactions);
-
 router.patch(
     "/status",
     checkAuth(Role.USER, Role.ADMIN),
@@ -57,5 +41,18 @@ router.patch(
     UserController.blockWallet
 );
 
+
+// user Update
+router.patch("/:id",
+    validateRequest(updateUserZodSchema),
+    checkAuth(...Object.values(Role)),
+    UserController.updateUser
+);
+
+// get user
+router.get("/:slug",
+    checkAuth(...Object.values(Role)),
+    UserController.getSingleUser
+);
 
 export const UserRoutes = router;

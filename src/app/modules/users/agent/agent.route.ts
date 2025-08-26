@@ -23,12 +23,6 @@ router.post(
   AgentController.cashOut
 );
 
-router.get(
-  "/my-transactions",
-  checkAuth(Role.AGENT),
-  AgentController.agentTransactions
-);
-
 // agent wallet
 router.patch(
   "/status",

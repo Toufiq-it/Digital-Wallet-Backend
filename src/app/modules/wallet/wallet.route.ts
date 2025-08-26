@@ -6,7 +6,7 @@ import { WalletController } from "./wallet.controller";
 const router = Router();
 
 // get own wallet
-router.get("/my-wallet",
+router.get("/:slug",
     checkAuth(Role.AGENT, Role.USER),
     WalletController.getMyWallet
 );

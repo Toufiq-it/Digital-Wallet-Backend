@@ -23,11 +23,18 @@ const createUser = catchAsync(async (req: Request, res: Response, next: NextFunc
 // get single user
 const getSingleUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const slug = req.params.slug;
-    const user = await UserService.getSingleUser(slug);
+
+    const decodeToken = req.user as JwtPayload
+    const loginSlug = decodeToken.slug
+    
+//     console.log("loginSlug from token:", loginSlug);
+// console.log("slug from params:", slug);
+
+    const user = await UserService.getSingleUser(slug, loginSlug);
 
     sendResponse(res, {
         success: true,
-        statusCode: httpStatus.CREATED,
+        statusCode: httpStatus.OK,
         message: "User Retrived Successfully",
         data: user,
     });
@@ -94,23 +101,6 @@ const sendMoney = catchAsync(async (req: Request, res: Response, next: NextFunct
     });
 });
 
-// get my Transaction
-const getMyTransactions = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const decodeToken = req.user as JwtPayload
-    const userId = decodeToken.userId
-    const query = req.query
-
-    const transactions = await UserService.getMyTransactions(userId, query as Record<string, string>);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "My Transaction history",
-        data: transactions,
-    });
-});
-
-
 // user wallet status update
 const blockWallet = catchAsync(async (req: Request, res: Response) => {
     const { userId, status } = req.body;
@@ -138,6 +128,5 @@ export const UserController = {
     addMoney,
     withdraw,
     sendMoney,
-    getMyTransactions,
     blockWallet,
 };

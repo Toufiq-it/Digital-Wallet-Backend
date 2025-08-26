@@ -42,6 +42,11 @@ It provides **secure wallet operations** for **Users, Agents, and Admins** with 
 
 ---
 
+# Live Link
+- https://digital-wallet-backend-eight.vercel.app/
+
+---
+
 ## 📡 API Endpoints
 
 Base URL: `https://digital-wallet-backend-eight.vercel.app/api`

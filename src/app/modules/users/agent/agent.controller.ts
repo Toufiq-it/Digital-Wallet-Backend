@@ -40,22 +40,6 @@ const cashOut = catchAsync(async (req: Request, res: Response, next: NextFunctio
     });
 });
 
-
-const agentTransactions = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const decodeToken = req.user as JwtPayload
-  const agentId = decodeToken.userId
-  const query = req.query
-
-  const transactions = await AgentService.agentTransactions(agentId, query as Record<string, string>);
-
-  sendResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "My Transaction history",
-    data: transactions,
-  });
-});
-
 // agent wallet update
 const suspendedWallet = catchAsync(async (req: Request, res: Response) => {
     const { agentId, status } = req.body;
@@ -76,6 +60,5 @@ const suspendedWallet = catchAsync(async (req: Request, res: Response) => {
 export const AgentController = {
     cashIn,
     cashOut,
-    agentTransactions,
     suspendedWallet,
 };
