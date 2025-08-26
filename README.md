@@ -1,5 +1,5 @@
 
-# 💳 Wallet Management System
+# 💳 Digital Wallet Management - Backend
 
 ## 📌 Project Overview
 This project is a **Wallet Management System** built with **Node.js, Express, TypeScript, and MongoDB**.  
@@ -42,8 +42,10 @@ It provides **secure wallet operations** for **Users, Agents, and Admins** with 
 
 ---
 
-# Live Link
-- https://digital-wallet-backend-eight.vercel.app/
+# Project Links
+- Live link: https://digital-wallet-backend-eight.vercel.app/
+
+- Video Explanation: 
 
 ---
 
@@ -96,7 +98,6 @@ Base URL: `https://digital-wallet-backend-eight.vercel.app/api`
 |--------|------------------------|-------------|
 | POST   | `/agent/cash-in`       | Agent deposits (cash-in) to a user wallet |
 | POST   | `/agent/cash-out`      | Agent withdraws (cash-out) from a user wallet |
-| GET    | `/agent/my-transactions` | Get logged-in agent’s transaction history |
 | PATCH  | `/agent/status`        | Update agent wallet status (SUSPENDED/APPROVED) |
 
 ---
@@ -104,6 +105,13 @@ Base URL: `https://digital-wallet-backend-eight.vercel.app/api`
 ### 💰 Wallet Routes 
 | Method | Endpoint               | Description |
 |--------|------------------------|-------------|
-| GET    | `/wallet/my-wallet`    | Get own wallet (User/Agent only) |
+| GET    | `/wallet/:slug`    | Get own wallet (User/Agent only) |
+
+---
+
+### 💰 Transaction Routes 
+| Method | Endpoint               | Description |
+|--------|------------------------|-------------|
+| GET    | `/transaction/:slug`    | Get logged-in (User/Agent) transaction history by slug/ID |
 
 
