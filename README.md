@@ -113,4 +113,12 @@ Base URL: `https://digital-wallet-backend-eight.vercel.app/api`
 |--------|------------------------|-------------|
 | GET    | `/transaction/:slug`    | Get logged-in (User/Agent) transaction history by slug/ID |
 
+---
+
+### Login Admin
+- phone: `01736390119`
+- password: `Tfq@1234` (All user/agent password same)
+
+---
+
 
