@@ -18,7 +18,6 @@ router.post("/register",
 
 // ---------------user Wallet Route-----------
 
-
 router.post("/add-money",
     checkAuth(Role.USER),
     validateRequest(addWithdrewMoneyZod),
@@ -41,6 +40,7 @@ router.patch(
     UserController.blockWallet
 );
 
+// ------------User update-------------
 
 // user Update
 router.patch("/:id",

@@ -12,6 +12,7 @@ import { Transaction } from "../../transaction/transaction.model";
 import { TransactionStatus, TransactionType } from "../../transaction/transaction.interface";
 
 
+// -------------------User Service---------------------
 
 // create user
 const createUser = async (payload: Partial<IUser>) => {
@@ -65,53 +66,6 @@ const createUser = async (payload: Partial<IUser>) => {
     throw error;
   }
 };
-
-// const createUser = async (payload: Partial<IUser>) => {
-//   const session = await mongoose.startSession();
-//   try {
-//     let createdUserId: mongoose.Types.ObjectId;
-
-//     await session.withTransaction(async () => {
-//       const { email, password, ...rest } = payload;
-
-//       const exists = await User.findOne({ email }).session(session);
-//       if (exists) {
-//         throw new AppError(httpStatus.BAD_REQUEST, "User already exists");
-//       }
-//       const hashPassword = await bcryptjs.hash(password as string, Number(envVars.BCRYPT_SALT_ROUND));
-//       const authProvider : IAuthProvider = { provider: "credential", providerId: email as string };
-
-//       // 1) Create user
-//       const [userDoc] = await User.create([{
-//         email,
-//         password: hashPassword,
-//         auth: [authProvider],
-//         ...rest,
-//       }], { session });
-
-//       // 2) Create wallet
-//       const [walletDoc] = await Wallet.create([{
-//         user: userDoc._id,
-//         balance: 50,
-//         status: userDoc.role === "AGENT" ? WalletStatus.APPROVED : WalletStatus.ACTIVE,
-//       }], { session });
-
-//       // 3) Link user.wallet
-//       userDoc.wallet = walletDoc._id;
-//       await userDoc.save({ session });
-
-//     createdUserId = userDoc._id;
-//     });
-
-//     // outside the transaction, fetch populated user (auto-populate hook will also work)
-//     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-//     const fullUser = await User.findById(createdUserId!).populate("wallet", "_id balance status");
-//     return fullUser;
-//   } finally {
-//     session.endSession(); // no abort/commit here; withTransaction handled it
-//   }
-// };
-
 
 // update user
 const updateUser = async (userId: string, payload: Partial<IUser>, decodedToken: JwtPayload) => {
@@ -339,7 +293,6 @@ const sendMoney = async (payload: { receiverId: string; amount: number }, userId
     session.endSession();
   }
 };
-
 
 // user wallet status update => admin
 const blockWallet = async (userId: string, status: WalletStatus) => {

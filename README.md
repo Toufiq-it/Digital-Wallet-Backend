@@ -1,9 +1,8 @@
-
 # 💳 Digital Wallet Management - Backend
 
 ## 📌 Project Overview
 This project is a **Wallet Management System** built with **Node.js, Express, TypeScript, and MongoDB**.  
-It provides **secure wallet operations** for **Users, Agents, and Admins** with **role-based access control (RBAC)**.  
+It provides **secure wallet operations** for **Users, Agents, and Admins** with **role-based access control (RBAC)**. 
 
 - Users can register, log in, and manage their wallet.  
 - Agents can perform **cash-in** (add money) and **cash-out** (withdraw money) for users.  
@@ -42,10 +41,10 @@ It provides **secure wallet operations** for **Users, Agents, and Admins** with 
 
 ---
 
-# Project Links
+## Project Links
 - Live link: https://digital-wallet-backend-eight.vercel.app/
 
-- Video Explanation: 
+- Video Explanation: https://drive.google.com/file/d/1P6ZRT8VkjzcXAsJia4ly-fhQmA_Qe9nP/view?usp=sharing
 
 ---
 

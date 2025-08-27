@@ -8,6 +8,8 @@ import { JwtPayload } from "jsonwebtoken";
 import AppError from "../../../errorHelpers/AppError";
 
 
+// -------------------User Controller---------------------
+
 // create user
 const createUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const user = await UserService.createUser(req.body);
